@@ -95,6 +95,20 @@ func (s *Server) Routes() []Route {
 	return routes
 }
 
+// Serve is for serverless purpose.
+// Don't use it when using the Server in regular HTTP server mode.
+// see https://vercel.com/docs/functions/runtimes/go
+func (s *Server) Serve(w http.ResponseWriter, r *http.Request) {
+	s.router.ServeHTTP(w, r)
+}
+
+// BindRoutes binds the routes to the server.
+// It's for serverless purpose.
+// You should call it before calling Serve().
+func (s *Server) BindRoutes() error {
+	return s.ngin.bindRoutes(s.router)
+}
+
 // Start starts the Server.
 // Graceful shutdown is enabled by default.
 // Use proc.SetTimeToForceQuit to customize the graceful shutdown period.
