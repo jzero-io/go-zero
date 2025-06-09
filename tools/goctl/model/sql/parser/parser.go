@@ -8,6 +8,7 @@ import (
 
 	"github.com/zeromicro/ddl-parser/parser"
 	"github.com/zeromicro/go-zero/core/collection"
+
 	"github.com/zeromicro/go-zero/tools/goctl/model/sql/converter"
 	"github.com/zeromicro/go-zero/tools/goctl/model/sql/model"
 	"github.com/zeromicro/go-zero/tools/goctl/model/sql/util"
@@ -64,8 +65,8 @@ func parseNameOriginal(ts []*parser.Table) (nameOriginals [][]string) {
 }
 
 // Parse parses ddl into golang structure
-func Parse(filename, database string, strict bool) ([]*Table, error) {
-	p := parser.NewParser()
+func Parse(filename, database string, strict bool, options ...parser.Option) ([]*Table, error) {
+	p := parser.NewParser(options...)
 	tables, err := p.From(filename)
 	if err != nil {
 		return nil, err
@@ -83,6 +84,7 @@ func Parse(filename, database string, strict bool) ([]*Table, error) {
 			primaryColumn    string
 			primaryColumnSet = collection.NewSet()
 			uniqueKeyMap     = make(map[string][]string)
+
 			// Unused local variable
 			// normalKeyMap     = make(map[string][]string)
 			columns = e.Columns
